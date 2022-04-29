@@ -66,7 +66,7 @@ void query(ifstream &in1, ifstream &in2, ofstream &o) {
     // get the names of the cities
     string name;
     // because of the limitation of the adjacency matrix, we have to do the mapping here
-    // adjacncy list or linked list based implementation can integrate city information
+    // adjacency list or linked list based implementation can integrate city information
     // to make things easier, we use int type for Vertex in Digraph 
     map<string, int> cities;    // map each city to a vertex (with an index)
     for (int i = 0; i < size && in1 >> name; i++) {
