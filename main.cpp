@@ -102,14 +102,22 @@ void query(ifstream &in1, ifstream &in2, ofstream &o) {
     // one query per line
     for (string line; getline(in2, line);) {
         istringstream ss(line);
-        string src, dst;
+        string src, dst, type;
         ss >> src;
         ss >> dst;
+        ss >> type;
         if (cities.find(src) == cities.end() || cities.find(dst) == cities.end()) {
             cout << "Invalid query: the queried city is not in the map." << endl;
         }
         else {
-            int result = graph.get_shortest_path(cities[src], cities[dst]);
+            int result;
+            if (type == "T")
+                result = graphTime.get_shortest_path(cities[src], cities[dst]);
+                else if (type == "C")
+                    result = graphCost.get_shortest_path(cities[src], cities[dst]);
+                    else
+                        throw FileContentException();
+            
             if (result == numeric_limits<int>::max()) {
                 o << "No available path." << endl;
             }
@@ -121,9 +129,13 @@ void query(ifstream &in1, ifstream &in2, ofstream &o) {
 
     // clean up
     for (int i = 0; i < size; i++) {
-        delete[] adj[i];
+        delete[] adjT[i];
     }
-    delete[] adj;
+    for (int i = 0; i < size; i++){
+        delete[] adjC[i];
+    }
+    delete[] adjT;
+    delete[] adjC;
 }
 
 int main(int argc, char* argv[])
