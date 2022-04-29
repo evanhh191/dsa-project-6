@@ -100,18 +100,19 @@ void query(ifstream &in1, ifstream &in2, ofstream &o) {
                 cost = weight.substr(index + 1, weight.length());
             }
 
-            if (isNumber(time) && (isNumber(cost))) {
-                adjT[count / size][count % size] = string_to_int(weight);
-                adjC[count / size][count % size] = string_to_int(weight);
-            } else {
+            if (!isNumber(time) || !isNumber(cost)) {
                 throw FileContentException();
+            } else {
+                adjT[count / size][count % size] = string_to_int(time);
+                adjC[count / size][count % size] = string_to_int(cost);
             }
         }
         count++;
     }
 
-    if (count != size * size)
+    if (count != size * size) {
         throw FileContentException();
+    }
     
     Digraph<int> graphTime(adjT, size);
     Digraph<int> graphCost(adjC, size);
@@ -119,6 +120,7 @@ void query(ifstream &in1, ifstream &in2, ofstream &o) {
     // get queries
     // one query per line
     for (string line; getline(in2, line);) {
+
         istringstream ss(line);
         string src, dst, type;
         ss >> src;
