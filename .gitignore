@@ -1,0 +1,6 @@
+*.class
+**/*.class
+*.json
+*.exe
+*.o
+p06.exe
