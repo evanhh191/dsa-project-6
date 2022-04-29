@@ -124,22 +124,22 @@ void query(ifstream &in1, ifstream &in2, ofstream &o) {
         ss >> src;
         ss >> dst;
         ss >> type;
+
         if (cities.find(src) == cities.end() || cities.find(dst) == cities.end()) {
             cout << "Invalid query: the queried city is not in the map." << endl;
-        }
-        else {
+        } else {
             int result;
-            if (type == "T")
+            if (type == "T") {
                 result = graphTime.get_shortest_path(cities[src], cities[dst]);
-                else if (type == "C")
-                    result = graphCost.get_shortest_path(cities[src], cities[dst]);
-                    else
-                        throw FileContentException();
-            
+            } else if (type == "C") {
+                result = graphCost.get_shortest_path(cities[src], cities[dst]);
+            } else {
+                throw FileContentException();
+            }
+
             if (result == numeric_limits<int>::max()) {
                 o << "No available path." << endl;
-            }
-            else {
+            } else {
                 o << result << endl;
             }
         }
