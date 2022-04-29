@@ -76,19 +76,36 @@ void query(ifstream &in1, ifstream &in2, ofstream &o) {
     // read the weights
     int count = 0;
     string weight;
-    int** adj = new int *[size];
+    string time;
+    string cost;
+    int** adjT = new int *[size];
+    int** adjC = new int *[size];
     for(int i = 0; i < size; i++)
-        adj[i] = new int[size];
+        adjT[i] = new int[size];
+
+    for(int i = 0; i < size; i++)
+        adjC[i] = new int[size];
 
     while (in1 >> weight && count < size * size) {
-        if (weight == "INF") {  // no connection between two vertices
-            adj[count / size][count % size] = numeric_limits<int>::max();
-        }
-        else if (!isNumber(weight)) {
-            throw FileContentException();
-        }
-        else {
-            adj[count / size][count % size] = string_to_int(weight);
+        if (weight == "INF|INF") {  // no connection between two vertices
+            adjT[count / size][count % size] = numeric_limits<int>::max();
+            adjC[count / size][count % size] = numeric_limits<int>::max();
+        } else {
+            int index = weight.find('|', 0);
+
+            if (index < 0) {
+                throw FileContentException();
+            } else {
+                time = weight.substr(0, index);
+                cost = weight.substr(index + 1, weight.length());
+            }
+
+            if (isNumber(time) && (isNumber(cost))) {
+                adjT[count / size][count % size] = string_to_int(weight);
+                adjC[count / size][count % size] = string_to_int(weight);
+            } else {
+                throw FileContentException();
+            }
         }
         count++;
     }
@@ -96,7 +113,8 @@ void query(ifstream &in1, ifstream &in2, ofstream &o) {
     if (count != size * size)
         throw FileContentException();
     
-    Digraph<int> graph(adj, size);
+    Digraph<int> graphTime(adjT, size);
+    Digraph<int> graphCost(adjC, size);
 
     // get queries
     // one query per line
